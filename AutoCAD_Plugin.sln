@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "make_block_cmd", "make_block_cmd\make_block_cmd.csproj", "{125F45E2-03FE-45A2-AC14-09FD84DB2CE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "layer_batch_tools", "layer_batch_tools\layer_batch_tools.csproj", "{27767ED8-2093-4A9C-B41B-D78C592608C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{125F45E2-03FE-45A2-AC14-09FD84DB2CE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{125F45E2-03FE-45A2-AC14-09FD84DB2CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{125F45E2-03FE-45A2-AC14-09FD84DB2CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{125F45E2-03FE-45A2-AC14-09FD84DB2CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {948DC320-59A7-422C-9D0F-9F57C1A23F9E}
+	EndGlobalSection
+EndGlobal
