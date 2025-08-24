@@ -6,6 +6,9 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 using Autodesk.AutoCAD.Colors;
 
+
+// Mehrere Layer-Eigenschaften auf einmal zu ändern, basierend auf einer Objektauswahl
+
 namespace AutoCAD_Plugin
 {
     public class LayerBatchTools
@@ -13,6 +16,7 @@ namespace AutoCAD_Plugin
         [CommandMethod("BATCH_SET_LAYER_STYLE")]
         public void BatchSetLayerStyle()
         {
+            // Get current document / database / editor
             Document doc = Application.DocumentManager.MdiActiveDocument;
             Editor ed = doc.Editor;
             Database db = doc.Database;

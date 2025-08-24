@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "make_block_cmd", "make_bloc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "layer_batch_tools", "layer_batch_tools\layer_batch_tools.csproj", "{27767ED8-2093-4A9C-B41B-D78C592608C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "move_lines_to_layer", "move_lines_to_layer\move_lines_to_layer.csproj", "{E3170B67-4244-40DA-AF6D-84E2CC1C5F25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27767ED8-2093-4A9C-B41B-D78C592608C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3170B67-4244-40DA-AF6D-84E2CC1C5F25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3170B67-4244-40DA-AF6D-84E2CC1C5F25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3170B67-4244-40DA-AF6D-84E2CC1C5F25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3170B67-4244-40DA-AF6D-84E2CC1C5F25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
