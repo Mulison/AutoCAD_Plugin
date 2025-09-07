@@ -22,18 +22,27 @@ pipeline {
                 echo 'Setting up build environment...'
                 script {
                     // Prüfe .NET Installation
-                    def dotnetVersion = bat(
+                    def dotnetOutput = bat(
                         script: 'dotnet --version',
                         returnStdout: true
                     ).trim()
+                    echo "Raw .NET output: ${dotnetOutput}"
+                    
+                    // 提取版本号（去除路径信息）
+                    def dotnetVersion = dotnetOutput.split('\n').last().trim()
                     echo "Installed .NET version: ${dotnetVersion}"
                     
                     // .NET 9.0 是向后兼容的，也支持 .NET 8.0 项目
-                    def majorVersion = dotnetVersion.split('\\.')[0] as Integer
-                    if (majorVersion < 8) {
-                        error "Required .NET 8.0 or higher not found. Installed version: ${dotnetVersion}"
+                    def versionParts = dotnetVersion.split('\\.')
+                    if (versionParts.length >= 1) {
+                        def majorVersion = versionParts[0] as Integer
+                        if (majorVersion < 8) {
+                            error "Required .NET 8.0 or higher not found. Installed version: ${dotnetVersion}"
+                        }
+                        echo "✓ .NET version check passed: ${dotnetVersion}"
+                    } else {
+                        error "Could not parse .NET version from: ${dotnetOutput}"
                     }
-                    echo "✓ .NET version check passed: ${dotnetVersion}"
                     
                     // Prüfe AutoCAD Installation
                     def autocadExists = bat(
