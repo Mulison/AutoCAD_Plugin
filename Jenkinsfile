@@ -113,9 +113,30 @@ pipeline {
                     ).trim()
                     
                     if (testProjects && testProjects != "NO_TESTS") {
-                        bat "dotnet test --configuration ${BUILD_CONFIGURATION} --no-build --verbosity normal"
+                        echo "Found test projects: ${testProjects}"
+                        bat "dotnet test --configuration ${BUILD_CONFIGURATION} --no-build --verbosity normal --logger trx --results-directory TestResults"
                     } else {
                         echo 'No test projects found, skipping tests'
+                        // Create a dummy test result to prevent pipeline failure
+                        bat 'mkdir TestResults 2>nul || echo "TestResults directory already exists"'
+                    }
+                }
+            }
+            post {
+                always {
+                    // Publish test results if they exist
+                    script {
+                        def testResultsExist = bat(
+                            script: 'if exist "TestResults\\*.trx" echo "EXISTS" else echo "NOT_EXISTS"',
+                            returnStdout: true
+                        ).trim()
+                        
+                        if (testResultsExist == "EXISTS") {
+                            echo "Publishing test results..."
+                            publishTestResults testResultsPattern: 'TestResults/*.trx'
+                        } else {
+                            echo "No test results to publish"
+                        }
                     }
                 }
             }

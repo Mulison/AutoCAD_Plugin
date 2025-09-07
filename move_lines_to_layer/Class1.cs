@@ -72,7 +72,7 @@ namespace move_lines_to_layer
                     total++;
                     try
                     {
-                        Entity ent = tr.GetObject(id, OpenMode.ForWrite) as Entity;
+                        Entity? ent = tr.GetObject(id, OpenMode.ForWrite) as Entity;
                         if (ent == null) { skipped++; continue; }
 
 

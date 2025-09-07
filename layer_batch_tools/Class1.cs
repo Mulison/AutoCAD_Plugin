@@ -36,7 +36,7 @@ namespace AutoCAD_Plugin
                 foreach (SelectedObject so in psr.Value)
                 {
                     if (so == null) continue;
-                    Entity ent = tr.GetObject(so.ObjectId, OpenMode.ForRead) as Entity;
+                    Entity? ent = tr.GetObject(so.ObjectId, OpenMode.ForRead) as Entity;
                     if (ent == null) continue;
                     if (!string.IsNullOrWhiteSpace(ent.Layer))
                         layerNames.Add(ent.Layer);
@@ -68,7 +68,7 @@ namespace AutoCAD_Plugin
             }
 
             // 4) Ask user: change linetype? (empty to skip)
-            string lineTypeName = null;
+            string? lineTypeName = null;
             {
                 PromptStringOptions pso = new PromptStringOptions(
                     "\nEnter target linetype name (e.g. Continuous/Hidden/Center), press Enter to skip")
