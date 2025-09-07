@@ -133,7 +133,10 @@ pipeline {
         
         stage('Deploy to Staging') {
             when {
-                branch 'develop' || branch 'main'
+                anyOf {
+                    branch 'dev'
+                    branch 'main'
+                }
             }
             steps {
                 echo 'Deploying to staging environment...'
@@ -202,14 +205,12 @@ pipeline {
         
         failure {
             echo 'Build failed!'
-            script {
-                // Optional: Benachrichtigung bei Fehler
-                // emailext (
-                //     subject: "Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
-                //     body: "Build failed for commit ${env.GIT_COMMIT}. Check console output for details.",
-                //     to: "your-email@example.com"
-                // )
-            }
+            // Optional: Benachrichtigung bei Fehler
+            // emailext (
+            //     subject: "Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
+            //     body: "Build failed for commit ${env.GIT_COMMIT}. Check console output for details.",
+            //     to: "your-email@example.com"
+            // )
         }
         
         unstable {
