@@ -44,17 +44,52 @@ pipeline {
                         error "Could not parse .NET version from: ${dotnetOutput}"
                     }
                     
-                    // Prüfe AutoCAD Installation
-                    def autocadExists = bat(
-                        script: 'if exist "${AUTOCAD_PATH}\\accoremgd.dll" echo "FOUND" else echo "NOT_FOUND"',
-                        returnStdout: true
-                    ).trim()
+                    // Prüfe AutoCAD Installation (可选)
+                    def possiblePaths = [
+                        'C:\\Program Files\\Autodesk\\AutoCAD 2026',
+                        'C:\\Program Files\\Autodesk\\AutoCAD 2025',
+                        'C:\\Program Files\\Autodesk\\AutoCAD 2024',
+                        'C:\\Program Files (x86)\\Autodesk\\AutoCAD 2026',
+                        'C:\\Program Files (x86)\\Autodesk\\AutoCAD 2025',
+                        'C:\\Program Files (x86)\\Autodesk\\AutoCAD 2024'
+                    ]
                     
-                    if (autocadExists != "FOUND") {
-                        error "AutoCAD 2026 not found at: ${AUTOCAD_PATH}"
+                    def autocadFound = false
+                    def foundPath = ""
+                    
+                    for (path in possiblePaths) {
+                        echo "Checking AutoCAD path: ${path}"
+                        // 检查多个可能的 AutoCAD DLL 文件
+                        def dllFiles = ['accoremgd.dll', 'acdbmgd.dll', 'acmgd.dll', 'acad.exe']
+                        def pathFound = false
+                        
+                        for (dllFile in dllFiles) {
+                            def autocadExists = bat(
+                                script: "if exist \"${path}\\${dllFile}\" echo \"FOUND\" else echo \"NOT_FOUND\"",
+                                returnStdout: true
+                            ).trim()
+                            
+                            echo "  Checking ${dllFile}: ${autocadExists}"
+                            
+                            if (autocadExists == "FOUND") {
+                                echo "✓ Found AutoCAD file: ${path}\\${dllFile}"
+                                autocadFound = true
+                                foundPath = path
+                                pathFound = true
+                                break
+                            }
+                        }
+                        
+                        if (pathFound) break
                     }
                     
-                    echo "AutoCAD 2026 found at: ${AUTOCAD_PATH}"
+                    if (autocadFound) {
+                        echo "✓ AutoCAD found at: ${foundPath}"
+                    } else {
+                        echo "⚠️  WARNING: AutoCAD not found in common installation paths"
+                        echo "⚠️  Build will continue, but AutoCAD-specific features may not work"
+                        echo "⚠️  Please ensure AutoCAD is installed for full functionality"
+                    }
                 }
             }
         }
