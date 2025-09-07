@@ -173,21 +173,7 @@ pipeline {
         stage('Package Plugins') {
             steps {
                 echo 'Packaging plugins...'
-                script {
-                    // Erstelle ZIP-Archive für jedes Plugin mit PowerShell
-                    bat """
-                        powershell -ExecutionPolicy Bypass -Command "& {
-                            Set-Location '${ARTIFACTS_DIR}'
-                            Get-ChildItem -Directory | ForEach-Object {
-                                \\$pluginName = \\$_.Name
-                                \\$zipName = \\"\\${pluginName}_v${BUILD_NUMBER}.zip\\"
-                                Write-Host \\"Creating package for \\$pluginName...\\"
-                                Compress-Archive -Path \\$pluginName -DestinationPath \\$zipName -Force
-                                Write-Host \\"Created: \\$zipName\\"
-                            }
-                        }"
-                    """
-                }
+                bat "cd ${ARTIFACTS_DIR} && for /d %%i in (*) do powershell Compress-Archive -Path \"%%i\" -DestinationPath \"%%i_v${BUILD_NUMBER}.zip\" -Force"
             }
         }
         
