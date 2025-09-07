@@ -179,11 +179,11 @@ pipeline {
                         powershell -ExecutionPolicy Bypass -Command "& {
                             Set-Location '${ARTIFACTS_DIR}'
                             Get-ChildItem -Directory | ForEach-Object {
-                                `$pluginName = `$_.Name
-                                `$zipName = `"`${pluginName}_v${BUILD_NUMBER}.zip`"
-                                Write-Host `"Creating package for `$pluginName...`"
-                                Compress-Archive -Path `$pluginName -DestinationPath `$zipName -Force
-                                Write-Host `"Created: `$zipName`"
+                                \\$pluginName = \\$_.Name
+                                \\$zipName = \\"\\${pluginName}_v${BUILD_NUMBER}.zip\\"
+                                Write-Host \\"Creating package for \\$pluginName...\\"
+                                Compress-Archive -Path \\$pluginName -DestinationPath \\$zipName -Force
+                                Write-Host \\"Created: \\$zipName\\"
                             }
                         }"
                     """
