@@ -175,6 +175,12 @@ pipeline {
                 echo 'Packaging plugins...'
                 bat "cd ${ARTIFACTS_DIR} && for /d %%i in (*) do powershell Compress-Archive -Path \"%%i\" -DestinationPath \"%%i_v${BUILD_NUMBER}.zip\" -Force"
             }
+            post {
+                always {
+                    // Archive the ZIP files as build artifacts
+                    archiveArtifacts artifacts: 'artifacts/*.zip', fingerprint: true
+                }
+            }
         }
         
         stage('Deploy to Staging') {
@@ -257,6 +263,9 @@ pipeline {
                 //     body: "Build succeeded for commit ${env.GIT_COMMIT}",
                 //     to: "your-email@example.com"
                 // )
+                
+                // Archive all ZIP files as build artifacts before cleanup
+                archiveArtifacts artifacts: 'artifacts/*.zip', fingerprint: true, allowEmptyArchive: true
                 
                 // 清理工作空间
                 echo "Cleaning up workspace after successful build..."
