@@ -224,15 +224,25 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            // cleanWs() 在 post 阶段可能不可用，使用 deleteDir() 替代
-            deleteDir()
+            // 注意：在 always 块中删除目录可能会影响 artifact 归档
+            // 如果需要在归档后清理，应该在 success 块的最后进行
         }
         
         success {
             echo 'Build succeeded!'
             script {
-                // Archive artifacts
-                archiveArtifacts artifacts: "${ARTIFACTS_DIR}/*.zip", fingerprint: true
+                // Archive artifacts only if they exist
+                def artifactsExist = bat(
+                    script: "if exist \"${ARTIFACTS_DIR}\\*.zip\" echo \"EXISTS\" else echo \"NOT_EXISTS\"",
+                    returnStdout: true
+                ).trim()
+                
+                if (artifactsExist == "EXISTS") {
+                    echo "Archiving artifacts..."
+                    archiveArtifacts artifacts: "${ARTIFACTS_DIR}/*.zip", fingerprint: true
+                } else {
+                    echo "No artifacts to archive"
+                }
                 
                 // Optional: Benachrichtigung bei Erfolg
                 // emailext (
@@ -240,6 +250,10 @@ pipeline {
                 //     body: "Build succeeded for commit ${env.GIT_COMMIT}",
                 //     to: "your-email@example.com"
                 // )
+                
+                // 清理工作空间
+                echo "Cleaning up workspace after successful build..."
+                deleteDir()
             }
         }
         
