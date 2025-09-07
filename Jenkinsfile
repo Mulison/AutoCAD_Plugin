@@ -10,12 +10,6 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code...'
-                checkout scm
-            }
-        }
         
         stage('Setup Environment') {
             steps {
@@ -114,11 +108,11 @@ pipeline {
                 script {
                     // Prüfe ob Test-Projekte vorhanden sind
                     def testProjects = bat(
-                        script: 'dir /s /b *.Test.csproj *Tests.csproj 2>nul',
+                        script: 'dir /s /b *.Test.csproj *Tests.csproj 2>nul || echo "NO_TESTS"',
                         returnStdout: true
                     ).trim()
                     
-                    if (testProjects) {
+                    if (testProjects && testProjects != "NO_TESTS") {
                         bat "dotnet test --configuration ${BUILD_CONFIGURATION} --no-build --verbosity normal"
                     } else {
                         echo 'No test projects found, skipping tests'
