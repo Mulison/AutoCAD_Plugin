@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'windows' // Verwendet Windows-Agent für AutoCAD DLLs
-    }
+    agent any // 使用任何可用的节点
     
     environment {
         DOTNET_VERSION = '8.0'
@@ -185,7 +183,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            cleanWs()
+            // cleanWs() 在 post 阶段可能不可用，使用 deleteDir() 替代
+            deleteDir()
         }
         
         success {
