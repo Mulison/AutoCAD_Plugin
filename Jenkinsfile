@@ -2,7 +2,7 @@ pipeline {
     agent any // 使用任何可用的节点
     
     environment {
-        DOTNET_VERSION = '8.0'
+        DOTNET_VERSION = '9.0'
         AUTOCAD_VERSION = '2026'
         BUILD_CONFIGURATION = 'Release'
         ARTIFACTS_DIR = 'artifacts'
@@ -28,9 +28,12 @@ pipeline {
                     ).trim()
                     echo "Installed .NET version: ${dotnetVersion}"
                     
-                    if (!dotnetVersion.startsWith('8.')) {
-                        error "Required .NET 8.0 not found. Installed version: ${dotnetVersion}"
+                    // .NET 9.0 是向后兼容的，也支持 .NET 8.0 项目
+                    def majorVersion = dotnetVersion.split('\\.')[0] as Integer
+                    if (majorVersion < 8) {
+                        error "Required .NET 8.0 or higher not found. Installed version: ${dotnetVersion}"
                     }
+                    echo "✓ .NET version check passed: ${dotnetVersion}"
                     
                     // Prüfe AutoCAD Installation
                     def autocadExists = bat(
