@@ -183,6 +183,27 @@ pipeline {
             }
         }
         
+        stage('Save to Local Directory') {
+            steps {
+                echo 'Saving artifacts to local directory...'
+                script {
+                    // Create local directory structure
+                    bat """
+                        if not exist "C:\\JenkinsArtifacts" mkdir "C:\\JenkinsArtifacts"
+                        if not exist "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI" mkdir "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI"
+                        if not exist "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI\\${BUILD_NUMBER}" mkdir "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI\\${BUILD_NUMBER}"
+                    """
+                    
+                    // Copy ZIP files to local directory
+                    bat """
+                        copy "artifacts\\*.zip" "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI\\${BUILD_NUMBER}\\"
+                        echo Successfully copied artifacts to C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI\\${BUILD_NUMBER}\\
+                        dir "C:\\JenkinsArtifacts\\AutoCAD-Plugin-CI\\${BUILD_NUMBER}"
+                    """
+                }
+            }
+        }
+        
         stage('Deploy to Staging') {
             when {
                 anyOf {
