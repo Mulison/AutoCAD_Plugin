@@ -21,7 +21,7 @@ Installieren Sie folgende Jenkins Plugins:
 - **Workspace Cleanup** - für Workspace-Bereinigung
 
 ### System-Anforderungen
-- **.NET 8.0 SDK** (auf Jenkins-Server installiert)
+- **.NET 9.0 SDK** (auf Jenkins-Server installiert)
 - **Git** (für Source Code Management)
 - **PowerShell 5.1 oder höher**
 - **AutoCAD 2026** (vollständig installiert auf Jenkins-Server)
@@ -68,10 +68,11 @@ Fügen Sie folgende Umgebungsvariablen hinzu:
 
 ```groovy
 environment {
-    DOTNET_VERSION = '8.0'
+    DOTNET_VERSION = '9.0'
     AUTOCAD_VERSION = '2026'
     BUILD_CONFIGURATION = 'Release'
     ARTIFACTS_DIR = 'artifacts'
+    AUTOCAD_PATH = 'C:\\Program Files\\Autodesk\\AutoCAD 2026'
     // Optional: Deployment-Pfade
     STAGING_PATH = '\\\\staging-server\\plugins'
     PRODUCTION_PATH = '\\\\production-server\\plugins'
@@ -83,9 +84,9 @@ environment {
 #### .NET SDK Installation
 1. Gehen Sie zu "Manage Jenkins" > "Global Tool Configuration"
 2. Fügen Sie .NET SDK hinzu:
-   - **Name**: `dotnet-8.0`
+   - **Name**: `dotnet-9.0`
    - **Installation**: Automatisch
-   - **Version**: 8.0.x
+   - **Version**: 9.0.x
 
 #### AutoCAD Installation auf Jenkins-Server
 Da wir **ohne Docker** arbeiten, muss AutoCAD direkt auf dem Jenkins-Server installiert sein:
@@ -135,10 +136,13 @@ Erstellt deploybare Versionen der Plugins.
 ### 7. Package Plugins
 Erstellt ZIP-Archive für die Distribution.
 
-### 8. Deploy to Staging
+### 8. Save to Local Directory
+Speichert die ZIP-Dateien in einem lokalen Verzeichnis (`C:\JenkinsArtifacts\AutoCAD-Plugin-CI\`).
+
+### 9. Deploy to Staging
 Stellt Plugins in der Staging-Umgebung bereit.
 
-### 9. Deploy to Production
+### 10. Deploy to Production
 Stellt Plugins in der Produktionsumgebung bereit.
 
 ## Deployment-Konfiguration
@@ -256,7 +260,7 @@ post {
 
 #### 1. .NET nicht gefunden
 ```
-Lösung: Stellen Sie sicher, dass .NET 8.0 SDK installiert ist und im PATH verfügbar
+Lösung: Stellen Sie sicher, dass .NET 9.0 SDK installiert ist und im PATH verfügbar
 ```
 
 #### 2. AutoCAD DLLs nicht gefunden

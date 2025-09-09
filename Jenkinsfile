@@ -1,5 +1,5 @@
 pipeline {
-    agent any // 使用任何可用的节点
+    agent any // Use any available node
     
     environment {
         DOTNET_VERSION = '9.0'
@@ -15,18 +15,18 @@ pipeline {
             steps {
                 echo 'Setting up build environment...'
                 script {
-                    // Prüfe .NET Installation
+                    // Check .NET Installation
                     def dotnetOutput = bat(
                         script: 'dotnet --version',
                         returnStdout: true
                     ).trim()
                     echo "Raw .NET output: ${dotnetOutput}"
                     
-                    // 提取版本号（去除路径信息）
+                    // Extract version number (remove path information)
                     def dotnetVersion = dotnetOutput.split('\n').last().trim()
                     echo "Installed .NET version: ${dotnetVersion}"
                     
-                    // .NET 9.0 是向后兼容的，也支持 .NET 8.0 项目
+                    // .NET 9.0 is backward compatible and also supports .NET 8.0 projects
                     def versionParts = dotnetVersion.split('\\.')
                     if (versionParts.length >= 1) {
                         def majorVersion = versionParts[0] as Integer
@@ -38,7 +38,7 @@ pipeline {
                         error "Could not parse .NET version from: ${dotnetOutput}"
                     }
                     
-                    // Prüfe AutoCAD Installation (可选)
+                    // Check AutoCAD Installation (optional)
                     def possiblePaths = [
                         'C:\\Program Files\\Autodesk\\AutoCAD 2026',
                         'C:\\Program Files\\Autodesk\\AutoCAD 2025',
@@ -53,7 +53,7 @@ pipeline {
                     
                     for (path in possiblePaths) {
                         echo "Checking AutoCAD path: ${path}"
-                        // 检查多个可能的 AutoCAD DLL 文件
+                        // Check multiple possible AutoCAD DLL files
                         def dllFiles = ['accoremgd.dll', 'acdbmgd.dll', 'acmgd.dll', 'acad.exe']
                         def pathFound = false
                         
@@ -146,10 +146,10 @@ pipeline {
             steps {
                 echo 'Publishing artifacts...'
                 script {
-                    // Erstelle Artifacts-Verzeichnis
+                    // Create Artifacts directory
                     bat "if not exist ${ARTIFACTS_DIR} mkdir ${ARTIFACTS_DIR}"
                     
-                    // Publish jedes Plugin-Projekt
+                    // Publish each plugin project
                     def projects = [
                         'layer_batch_tools/layer_batch_tools.csproj',
                         'make_block_cmd/make_block_cmd.csproj',
@@ -214,7 +214,7 @@ pipeline {
             steps {
                 echo 'Deploying to staging environment...'
                 script {
-                    // Beispiel: Kopieren zu Staging-Server
+                    // Example: Copy to staging server
                     echo "Deploying artifacts to staging server..."
                     bat """
                         if exist "\\\\staging-server\\plugins" (
@@ -235,7 +235,7 @@ pipeline {
             steps {
                 echo 'Deploying to production environment...'
                 script {
-                    // Beispiel: Kopieren zu Production-Server mit Backup
+                    // Example: Copy to production server with backup
                     echo "Deploying artifacts to production server..."
                     bat """
                         if exist "\\\\production-server\\plugins" (
@@ -258,8 +258,8 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            // 注意：在 always 块中删除目录可能会影响 artifact 归档
-            // 如果需要在归档后清理，应该在 success 块的最后进行
+            // Note: Deleting directories in the always block may affect artifact archiving
+            // If cleanup after archiving is needed, it should be done at the end of the success block
         }
         
         success {
@@ -278,7 +278,7 @@ pipeline {
                     echo "No artifacts to archive"
                 }
                 
-                // Optional: Benachrichtigung bei Erfolg
+                // Optional: Notification on success
                 // emailext (
                 //     subject: "Build Success: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
                 //     body: "Build succeeded for commit ${env.GIT_COMMIT}",
@@ -288,7 +288,7 @@ pipeline {
                 // Archive all ZIP files as build artifacts before cleanup
                 archiveArtifacts artifacts: 'artifacts/*.zip', fingerprint: true, allowEmptyArchive: true
                 
-                // 清理工作空间
+                // Clean up workspace
                 echo "Cleaning up workspace after successful build..."
                 deleteDir()
             }
@@ -296,7 +296,7 @@ pipeline {
         
         failure {
             echo 'Build failed!'
-            // Optional: Benachrichtigung bei Fehler
+            // Optional: Notification on error
             // emailext (
             //     subject: "Build Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER}",
             //     body: "Build failed for commit ${env.GIT_COMMIT}. Check console output for details.",
